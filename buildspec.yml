@@ -1,25 +1,17 @@
-version: 0.2
-
-phases:
-  install:
-    runtime-versions:
-      nodejs: 18
-    commands:
-      - echo Installing dependencies
-      - npm install
-  build:
-    commands:
-      - echo Build started
-      - chmod +x scripts/start_server.sh
-      - chmod +x scripts/stop_server.sh
-  post_build:
-    commands:
-      - echo Build completed
-
-artifacts:
-  files:
-    - app.js
-    - package.json
-    - package-lock.json
-    - appspec.yml
-    - scripts/**/*
+cat > appspec.yml << 'EOF'
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/my-aws-app
+file_exists_behavior: OVERWRITE
+hooks:
+  ApplicationStop:
+    - location: scripts/stop_server.sh
+      timeout: 10
+      runas: root
+  ApplicationStart:
+    - location: scripts/start_server.sh
+      timeout: 30
+      runas: root
+EOF
