@@ -1,4 +1,3 @@
-cat > appspec.yml << 'EOF'
 version: 0.0
 os: linux
 files:
@@ -14,4 +13,3 @@ hooks:
     - location: scripts/start_server.sh
       timeout: 30
       runas: root
-EOF
